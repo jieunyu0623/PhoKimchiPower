@@ -2,4 +2,9 @@
     <string name="app_name">PhoKimchiPower</string>
     <string name="textView_titleCourses">COURSES</string>
     <string name="button_coursesAdd">ADD A COURSE</string>
+    <string name="textView_addCourse">ADD A COURSE</string>
+    <string name="textView_courseName">COURSE NAME:</string>
+    <string name="textView_evalType">EVALUATION TYPE</string>
+    <string name="textView_weight">WEIGHT</string>
+    <string name="button_addCourse">ADD</string>
 </resources>
