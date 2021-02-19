@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PhoKimchiPower</string>
+    <string name="textView_titleCourses">COURSES</string>
+    <string name="button_coursesAdd">ADD A COURSE</string>
 </resources>
