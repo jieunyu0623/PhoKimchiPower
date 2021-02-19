@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">PhoKimchiPower</string>
+    <string name="textView_mainTitle">GRADESTRACKER</string>
+    <string name="button_mainLogin">LOGIN</string>
+    <string name="button_mainSignup">SIGN UP</string>
 </resources>
