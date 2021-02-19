@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.075" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView_main"
         android:layout_width="226dp"
         android:layout_height="212dp"
         app:layout_constraintBottom_toBottomOf="parent"
