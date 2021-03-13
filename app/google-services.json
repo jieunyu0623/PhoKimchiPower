@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "558487530733",
+    "project_id": "phokimchipower",
+    "storage_bucket": "phokimchipower.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558487530733:android:e18a88d7ef68a4de0a70e4",
+        "android_client_info": {
+          "package_name": "com.bcit.phokimchipower"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558487530733-rlrquhsu13cki0rtrngsg374phjukf88.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9A3mkAdneEOKhcHd6rtSrdWzGglwo_54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558487530733-rlrquhsu13cki0rtrngsg374phjukf88.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

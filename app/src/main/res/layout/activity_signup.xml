@@ -60,10 +60,10 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/name_signup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <CheckBox
         android:id="@+id/agreement_signup"
@@ -72,14 +72,16 @@
         android:text="@string/terms_signup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_signup"
-        app:layout_constraintVertical_bias="0.065" />
+        app:layout_constraintVertical_bias="0.092" />
 
     <Button
         android:id="@+id/signupButton_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:lineSpacingExtra="18sp"
         android:paddingLeft="30dp"
         android:paddingTop="18dp"
         android:paddingRight="55dp"
@@ -87,8 +89,9 @@
         android:text="@string/signupButton_signup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/agreement_signup"
-        app:layout_constraintVertical_bias="0.242" />
+        app:layout_constraintVertical_bias="0.245" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
