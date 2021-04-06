@@ -37,6 +37,7 @@
         android:layout_width="97dp"
         android:layout_height="46dp"
         android:text="@string/button_mainLogin"
+        app:cornerRadius="7dp"
         app:layout_constraintBottom_toTopOf="@+id/button_mainSignup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +50,7 @@
         android:layout_height="46dp"
         android:layout_marginBottom="132dp"
         android:text="@string/button_mainSignup"
+        app:cornerRadius="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
