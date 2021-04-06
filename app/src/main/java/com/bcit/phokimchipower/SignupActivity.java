@@ -1,8 +1,11 @@
 package com.bcit.phokimchipower;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +20,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 
 public class SignupActivity extends AppCompatActivity {
@@ -24,6 +31,11 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
     private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+    HashMap<Object,String> hashMap = new HashMap<>();
+    String uid;
+    FirebaseUser user;
     EditText email;
     EditText name;
     EditText password;
@@ -38,15 +50,16 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        mAuth = FirebaseAuth.getInstance();
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Create Account");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //gets the user email, name and password from user inputs.
+        //user id is automatically created.
+        uid = mAuth.getUid();
         email = findViewById(R.id.email_signup);
         name = findViewById(R.id.name_signup);
         password = findViewById(R.id.password_signup);
-
-        user_email = email.getText().toString();
-        user_name = name.getText().toString();
-        user_password = password.getText().toString();
 
         agreement = findViewById(R.id.agreement_signup);
 
@@ -54,6 +67,12 @@ public class SignupActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //converts the user information into string.
+                user_email = email.getText().toString();
+                user_name = name.getText().toString();
+                user_password = password.getText().toString();
+
                 createAccount(user_email, user_password);
                 //and then goes to the main page.
                 //delete sign up buttons and sign in buttons.
@@ -83,19 +102,46 @@ public class SignupActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             System.out.println("success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
+                            user_email = user.getEmail();
+                            uid = user.getUid();
+                            user_name = name.getText().toString().trim();
+
+                            //puts user data to the hashmap.
+                            hashMap.put("uid",uid);
+                            hashMap.put("email",user_email);
+                            hashMap.put("name",user_name);
+                            hashMap.put("password", user_password);
+
+                            mAuth = FirebaseAuth.getInstance(); //gets the authentication access
+                            database = FirebaseDatabase.getInstance(); //gets the access to the database
+                            reference = database.getReference("Users"); //gets the User instance from the firebase
+
+                            //escapes the signup page once the signup is successful.
+                            Intent intent = new Intent(SignupActivity.this, MainActivity.class); //navigates back to the main page.
+                            startActivity(intent);
+                            finish();
+                            Toast.makeText(SignupActivity.this, "you successfully created an account!", Toast.LENGTH_SHORT).show();
+
                         } else {
-                            // If sign in fails, display a message to the user.
+                            //if signup fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignupActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "Authentication failed. This account already exists!",
+                                    Toast.LENGTH_LONG).show();
+                            return;
                         }
                     }
                 });
+    }
+
+    public boolean onSupportNavigateUp() {
+        onBackPressed();; // when the user hits the goback button
+        return super.onSupportNavigateUp(); // goback button activates.
     }
 
     private void signIn(String email, String password) {
