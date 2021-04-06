@@ -39,9 +39,12 @@ public class SignupActivity extends AppCompatActivity {
     EditText email;
     EditText name;
     EditText password;
+    EditText password_check;
     String user_email;
     String user_name;
     String user_password;
+    String user_password_check;
+
     CheckBox agreement;
     Button signUpButton;
 
@@ -55,20 +58,10 @@ public class SignupActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance(); //gets the access to the database
         reference = database.getReference("Users"); //gets the User instance from the firebase
 
-        ActionBar actionBar = getSupportActionBar();
-        System.out.println("1");
-
-        // actionBar.setTitle("Create Account");
-        System.out.println("2");
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-        System.out.println("3");
-
-        //gets the user email, name and password from user inputs.
-        //user id is automatically created.
-        // uid = mAuth.getUid();
         email = findViewById(R.id.email_signup);
         name = findViewById(R.id.name_signup);
         password = findViewById(R.id.password_signup);
+        password_check = findViewById(R.id.password_check_signup);
 
         agreement = findViewById(R.id.agreement_signup);
 
@@ -81,26 +74,22 @@ public class SignupActivity extends AppCompatActivity {
                 user_email = email.getText().toString();
                 user_name = name.getText().toString();
                 user_password = password.getText().toString();
+                user_password_check = password_check.getText().toString();
 
-                createAccount(user_email,user_password);
-                //and then goes to the main page.
-                //delete sign up buttons and sign in buttons.
-                //replace those buttons with user info. ex) "Hello, <username>"
-
+                if (user_password.equals(user_password_check)) {
+                    if (!agreement.isChecked()) {
+                        Toast.makeText(SignupActivity.this, "Please agree to the term.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    createAccount(user_email,user_password);
+                } else {
+                    Toast.makeText(SignupActivity.this, "Password Check failed. Please try again.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         });
 
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser != null){
-//            currentUser.reload();
-//        }
-//    }
 
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
@@ -115,23 +104,9 @@ public class SignupActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            System.out.println("yo");
-//                            System.out.println("success");
+                            System.out.println("success");
                             user = mAuth.getCurrentUser();
                             System.out.println(user.getEmail());
-//                            user_email = user.getEmail();
-//                            uid = user.getUid();
-//                            user_name = name.getText().toString().trim();
-//
-//                            //puts user data to the hashmap.
-//                            hashMap.put("uid", uid);
-//                            hashMap.put("email", user_email);
-//                            hashMap.put("name", user_name);
-//                            hashMap.put("password", user_password);
-//
-//                            mAuth = FirebaseAuth.getInstance(); //gets the authentication access
-//                            database = FirebaseDatabase.getInstance(); //gets the access to the database
-//                            reference = database.getReference("Users"); //gets the User instance from the firebase
 
                             //escapes the signup page once the signup is successful.
                             Intent intent = new Intent(SignupActivity.this, MainActivity.class); //navigates back to the main page.
@@ -140,6 +115,12 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, "you successfully created an account!", Toast.LENGTH_SHORT).show();
 
                         } else {
+                            //if the length of the password is less than 6...
+                            if (user_password.length() < 6) {
+                                Toast.makeText(SignupActivity.this, "Password should be at least 6 characters.",
+                                        Toast.LENGTH_LONG).show();
+                                return;
+                            }
                             //if signup fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignupActivity.this, "Authentication failed. This account already exists!",
@@ -155,57 +136,6 @@ public class SignupActivity extends AppCompatActivity {
         onBackPressed();
         ; // when the user hits the goback button
         return super.onSupportNavigateUp(); // goback button activates.
-    }
-
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
-        if (!validateForm()) {
-            return;
-        }
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(SignupActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(SignupActivity.this, "Successfully Signed in", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(SignupActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
-
-    private void signOut() {
-        mAuth.signOut();
-    }
-
-    private void reload() {
-        mAuth.getCurrentUser().reload().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(SignupActivity.this,
-                            "Reload successful!",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e(TAG, "reload", task.getException());
-                    Toast.makeText(SignupActivity.this,
-                            "Failed to reload user.",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     private boolean validateForm() {

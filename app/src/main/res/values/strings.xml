@@ -13,4 +13,12 @@
     <string name="textView_mainTitle">GRADESTRACKER</string>
     <string name="button_mainLogin">LOGIN</string>
     <string name="button_mainSignup">SIGN UP</string>
+    <string name="password_hint">password</string>
+    <string name="name_hint">name</string>
+    <string name="email_hint">email</string>
+    <string name="password_check_hint">password check</string>
+    <string name="password_check_EditText_signup">PASSWORD CHECK:</string>
+    <string name="password_check_PlainText_signup">PASSWORD CHECK:</string>
+    <string name="emailTitle_TextView_login">EMAIL:</string>
+    <string name="passwordTitle_TextView_login">PASSWORD:</string>
 </resources>
