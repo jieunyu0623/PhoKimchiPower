@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">PhoKimchiPower</string>
+    <string name="loginTitle_login">LOGIN NOW!</string>
+    <string name="emailPlainText_login">EMAIL:</string>
+    <string name="passwordPlainText_login">PASSWORD:</string>
+    <string name="loginButton_login">LOGIN</string>
+    <string name="signupTitle_signup">SIGN UP NOW!</string>
+    <string name="email_signup">EMAIL:</string>
+    <string name="name_signup">NAME:</string>
+    <string name="password_signup">PASSWORD:</string>
+    <string name="terms_signup">I agree to give away my personal information</string>
+    <string name="signupButton_signup">SIGN UP</string>
     <string name="textView_mainTitle">GRADESTRACKER</string>
     <string name="button_mainLogin">LOGIN</string>
     <string name="button_mainSignup">SIGN UP</string>
