@@ -44,15 +44,15 @@ public class LoginActivity extends AppCompatActivity {
                 String email = mEmailText.getText().toString().trim();
                 String pwd = mPasswordText.getText().toString().trim();
                 mAuth.signInWithEmailAndPassword(email,pwd)
-                        .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    Intent intent = new Intent(MainActivity.this, BottomNaviActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
 
                                 }else{
-                                    Toast.makeText(MainActivity.this,"cannot login!",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this,"cannot login!",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
