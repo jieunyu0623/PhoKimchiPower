@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="evaluation_type">
+        <item>Assignments</item>
+        <item>Quizzes</item>
+        <item>Midterm</item>
+        <item>Final</item>
+        <item>Participation</item>
+    </string-array>
+</resources>

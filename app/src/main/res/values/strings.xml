@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PhoKimchiPower</string>
+    <string name="evaluation_type_textView_grade">EVALUATION TYPE:</string>
+    <string name="add_a_grade_textView_grade">ADD A GRADE</string>
+    <string name="name_textView_grade">NAME:</string>
+    <string name="grade_textView_grade">GRADE:</string>
+    <string name="add_button_grade">ADD</string>
 </resources>
