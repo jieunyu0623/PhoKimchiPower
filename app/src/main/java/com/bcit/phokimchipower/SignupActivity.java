@@ -106,6 +106,13 @@ public class SignupActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             System.out.println("success");
                             user = mAuth.getCurrentUser();
+                            uid = user.getUid();
+                            reference.child(uid);
+
+                            hashMap.put("name", user_name);
+                            hashMap.put("email", user_email);
+
+                            reference.setValue(hashMap);
                             System.out.println(user.getEmail());
 
                             //escapes the signup page once the signup is successful.
