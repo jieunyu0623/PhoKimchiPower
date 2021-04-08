@@ -9,15 +9,9 @@ public class Course {
 
     public Course(){}
 
-//    public Course(String courseName, HashMap<String, Integer> weight){
-//        this.courseName = courseName;
-//        this.weight = weight;
-//        this.currentGrade = 0;
-//    }
-
-    public Course(String courseName){ //testing
+    public Course(String courseName, HashMap<String, Integer> weight){
         this.courseName = courseName;
-        //this.weight = weight;
+        this.weight = weight;
         this.currentGrade = 0;
     }
 
@@ -27,5 +21,9 @@ public class Course {
 
     public Double getCurrentGrade(){
         return currentGrade;
+    }
+
+    public HashMap<String, Integer> getWeight(){
+        return weight;
     }
 }
