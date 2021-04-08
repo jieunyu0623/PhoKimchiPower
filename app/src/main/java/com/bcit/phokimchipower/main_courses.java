@@ -31,13 +31,12 @@ public class main_courses extends AppCompatActivity {
         addCourse = findViewById(R.id.main_addCourse);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        databaseRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("courses");
+        databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("courses");
         FirebaseRecyclerOptions<Course> options = new FirebaseRecyclerOptions.Builder<Course>().setQuery(databaseRef, Course.class)
                 .build();
         adapter = new CourseAdapter(options);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         addCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

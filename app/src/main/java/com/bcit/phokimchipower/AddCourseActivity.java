@@ -1,6 +1,7 @@
 package com.bcit.phokimchipower;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddCourseActivity extends AppCompatActivity {
     Spinner spinner1;
@@ -30,6 +34,12 @@ public class AddCourseActivity extends AppCompatActivity {
     Spinner spinner4;
     Spinner spinner5;
     Spinner spinner6;
+    EditText weight1;
+    EditText weight2;
+    EditText weight3;
+    EditText weight4;
+    EditText weight5;
+    EditText weight6;
     EditText name;
     Button add;
 
@@ -47,6 +57,12 @@ public class AddCourseActivity extends AppCompatActivity {
         spinner4 = findViewById(R.id.spinner_evalType4);
         spinner5 = findViewById(R.id.spinner_evalType5);
         spinner6 = findViewById(R.id.spinner_evalType6);
+        weight1 = findViewById(R.id.editText_weight1);
+        weight2 = findViewById(R.id.editText_weight2);
+        weight3 = findViewById(R.id.editText_weight3);
+        weight4 = findViewById(R.id.editText_weight4);
+        weight5 = findViewById(R.id.editText_weight5);
+        weight6 = findViewById(R.id.editText_weight6);
         name = findViewById(R.id.editText_addCourse_name);
         add = findViewById(R.id.button_addCourse);
         ArrayList<String> list = new ArrayList<>();
@@ -77,18 +93,42 @@ public class AddCourseActivity extends AppCompatActivity {
 
     private void addCourse() {
         ValueEventListener listener = new ValueEventListener() {
+            final int weight1Value = Integer.parseInt(weight1.getText().toString());
+            final int weight2Value = Integer.parseInt(weight2.getText().toString());
+            final int weight3Value = Integer.parseInt(weight3.getText().toString());
+            final int weight4Value = Integer.parseInt(weight4.getText().toString());
+            final int weight5Value = Integer.parseInt(weight5.getText().toString());
+            final int weight6Value = Integer.parseInt(weight6.getText().toString());
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Course c = new Course(name.getText().toString());
-                User newUser = snapshot.getValue(User.class);
-
+                ArrayList<Course> newCourse = new ArrayList<>();
+                HashMap<String, Integer> weight = new HashMap<>();
+                weight.put(spinner1.getSelectedItem().toString(), weight1Value);
+                weight.put(spinner2.getSelectedItem().toString(), weight2Value);
+                weight.put(spinner3.getSelectedItem().toString(), weight3Value);
+                weight.put(spinner4.getSelectedItem().toString(), weight4Value);
+                weight.put(spinner5.getSelectedItem().toString(), weight5Value);
+                weight.put(spinner6.getSelectedItem().toString(), weight6Value);
+                Course c = new Course(name.getText().toString(), weight);
+                HashMap<String, Object> postCourse = new HashMap<>();
+                if(snapshot.hasChild("courses")) {
+                    for(DataSnapshot ss: snapshot.child("courses").getChildren()){
+                        postCourse.put(ss.getKey(), ss.getValue(Course.class));
+                        int size = postCourse.size();
+                        postCourse.put(Integer.toString(size), c);
+                    }
+                    databaseRef.child("courses").updateChildren(postCourse);
+                } else {
+                    newCourse.add(c);
+                    databaseRef.child("courses").setValue(newCourse);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         };
-        databaseRef.child("courses").addListenerForSingleValueEvent(listener);
+        databaseRef.addListenerForSingleValueEvent(listener);
         Intent intent = new Intent(AddCourseActivity.this, main_courses.class);
         startActivity(intent);
     }

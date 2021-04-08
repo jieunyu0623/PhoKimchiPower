@@ -1,30 +1,22 @@
 package com.bcit.phokimchipower;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
     String uId;
     String email;
     String name;
     ArrayList<Course> courses;
-    int courseNumber = -1;
 
-    //    public User(String uId, String email, String name, ArrayList<Course> courses) {
-//        this.uId = uId;
-//        this.email = email;
-//        this.name = name;
-//        this.courses = courses;
-//    }
     public User(String uId, String email, String name) {
-        this.courseNumber++;
         this.uId = uId;
         this.email = email;
         this.name = name;
         this.courses = new ArrayList<>();
-    }
-
-    public int getCourseNumber() {
-        return courseNumber;
     }
 
     public String getuId(){
