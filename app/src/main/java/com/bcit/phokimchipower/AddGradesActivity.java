@@ -87,7 +87,7 @@ class AddGradesActivity extends AppCompatActivity {
                     Toast.makeText(AddGradesActivity.this,"Grades can't be negative",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                reference.child(uid).child("courses").child(current_user.getCourseNumber() + "").child("currentGrade")
+                reference.child(uid).child("courses").child(current_user.getCourseNumber() + "").child("currentGrade");
 
 
                 Intent intent = new Intent(AddGradesActivity.this, testActivity.class); //navigates back to the main page.
