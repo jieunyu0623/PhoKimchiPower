@@ -11,12 +11,14 @@ public class User {
     String email;
     String name;
     ArrayList<Course> courses;
+    int courseNumber = -1;
 
     public User(String uId, String email, String name) {
         this.uId = uId;
         this.email = email;
         this.name = name;
         this.courses = new ArrayList<>();
+        this.courseNumber++;
     }
 
     public String getuId(){
@@ -37,6 +39,10 @@ public class User {
 
     public ArrayList<Course> getCourses(){
         return courses;
+    }
+
+    public int getCourseNumber() {
+        return courseNumber;
     }
 }
 
