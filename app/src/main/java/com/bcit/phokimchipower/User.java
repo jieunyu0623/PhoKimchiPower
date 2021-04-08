@@ -7,6 +7,7 @@ public class User {
     String email;
     String name;
     ArrayList<Course> courses;
+    int courseNumber = -1;
 
     //    public User(String uId, String email, String name, ArrayList<Course> courses) {
 //        this.uId = uId;
@@ -15,10 +16,15 @@ public class User {
 //        this.courses = courses;
 //    }
     public User(String uId, String email, String name) {
+        this.courseNumber++;
         this.uId = uId;
         this.email = email;
         this.name = name;
         this.courses = new ArrayList<>();
+    }
+
+    public int getCourseNumber() {
+        return courseNumber;
     }
 
     public String getuId(){
@@ -41,3 +47,5 @@ public class User {
         return courses;
     }
 }
+
+
