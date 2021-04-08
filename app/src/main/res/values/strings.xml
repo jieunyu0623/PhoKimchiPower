@@ -21,4 +21,12 @@
     <string name="password_check_PlainText_signup">PASSWORD CHECK:</string>
     <string name="emailTitle_TextView_login">EMAIL:</string>
     <string name="passwordTitle_TextView_login">PASSWORD:</string>
+    <string name="addCourse_name">ADD A COURSE</string>
+    <string name="textView_courseName_label">COURSE NAME</string>
+    <string name="textView_weight">Weight</string>
+    <string name="textView_weight2">Weight</string>
+    <string name="textView_weight3">Weight</string>
+    <string name="textView_weight4">Weight</string>
+    <string name="textView_weight5">Weight</string>
+    <string name="textView_weight6">Weight</string>
 </resources>
