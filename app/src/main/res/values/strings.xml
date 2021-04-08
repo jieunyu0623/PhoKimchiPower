@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PhoKimchiPower</string>
+    <string name="calculatorTtitle_textView_calculator">CALCULATOR</string>
+    <string name="current_grade_textView_calculator">CURRENT GRADE:</string>
+    <string name="desired_grade_textView_calculator">DESIRED GRADE:</string>
+    <string name="grade_textView_calculator">GRADE:</string>
+    <string name="calculate_button_calculator">CALCULATE</string>
 </resources>
