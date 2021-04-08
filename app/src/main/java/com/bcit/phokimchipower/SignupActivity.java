@@ -107,7 +107,7 @@ public class SignupActivity extends AppCompatActivity {
                             System.out.println("success");
                             user = mAuth.getCurrentUser();
                             uid = user.getUid();
-                            reference.child(uid);
+                            reference = reference.child(uid);
 
                             hashMap.put("name", user_name);
                             hashMap.put("email", user_email);
