@@ -28,12 +28,12 @@
             android:layout_weight="1"
             android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
-            android:text="DESIRED GRADE:"
+            android:text="NAME:"
             android:textColor="#050505"
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/evaluation_name_EditText_grades"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -115,7 +115,7 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName2"
+            android:id="@+id/grade_editText_grades"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
