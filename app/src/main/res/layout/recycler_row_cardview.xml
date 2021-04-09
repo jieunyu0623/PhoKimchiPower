@@ -7,10 +7,11 @@
     android:gravity="center_horizontal">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_elem"
         android:layout_width="152dp"
+
         android:layout_height="144dp"
         android:layout_margin="10dp"
-
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"

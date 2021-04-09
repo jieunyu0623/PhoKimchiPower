@@ -28,6 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddCourseActivity extends AppCompatActivity {
+
+    public static final String COURSE_NAME_EXTRA = "ca.bcit.phokimchipower.coursename";
+    public static final String COURSE_CURRENT_GRADE_EXTRA = "ca.bcit.phokimchipower.currentgrade";
+    public static final String COURSE_WEIGHT_EXTRA = "ca.bcit.phokimchipower.weight";
+
     Spinner spinner1;
     Spinner spinner2;
     Spinner spinner3;
@@ -99,10 +104,14 @@ public class AddCourseActivity extends AppCompatActivity {
             final int weight4Value = Integer.parseInt(weight4.getText().toString());
             final int weight5Value = Integer.parseInt(weight5.getText().toString());
             final int weight6Value = Integer.parseInt(weight6.getText().toString());
+            final ArrayList<Course> newCourse = new ArrayList<>();
+            final HashMap<String, Integer> weight = new HashMap<>();
+            final HashMap<String, Object> postCourse = new HashMap<>();
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Course> newCourse = new ArrayList<>();
-                HashMap<String, Integer> weight = new HashMap<>();
+                //ArrayList<Course> newCourse = new ArrayList<>();
+                //HashMap<String, Integer> weight = new HashMap<>();
                 weight.put(spinner1.getSelectedItem().toString(), weight1Value);
                 weight.put(spinner2.getSelectedItem().toString(), weight2Value);
                 weight.put(spinner3.getSelectedItem().toString(), weight3Value);
@@ -110,7 +119,7 @@ public class AddCourseActivity extends AppCompatActivity {
                 weight.put(spinner5.getSelectedItem().toString(), weight5Value);
                 weight.put(spinner6.getSelectedItem().toString(), weight6Value);
                 Course c = new Course(name.getText().toString(), weight);
-                HashMap<String, Object> postCourse = new HashMap<>();
+//                HashMap<String, Object> postCourse = new HashMap<>();
                 if(snapshot.hasChild("courses")) {
                     for(DataSnapshot ss: snapshot.child("courses").getChildren()){
                         postCourse.put(ss.getKey(), ss.getValue(Course.class));
