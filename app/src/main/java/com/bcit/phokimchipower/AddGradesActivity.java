@@ -44,9 +44,7 @@ public class AddGradesActivity extends AppCompatActivity {
     EditText grade;
     Button add_grade_button;
     Course current_course;
-    Boolean is_selected;
     String courseName;
-    String dummyCourseName = "Name";
     private static final String TAG = "AddGradesActivity";
 
     Spinner evaluation_type;
@@ -80,26 +78,28 @@ public class AddGradesActivity extends AppCompatActivity {
         evaluation_type.setAdapter(arrAdapter);
 
         //attach the listener to the spinner
-        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                is_selected = true;
-                String choice = parent.getItemAtPosition(position).toString();
-                System.out.println(choice);
-                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
-            }
+//        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String choice = parent.getItemAtPosition(position).toString();
+//                System.out.println(choice);
+//                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+        Intent intent = getIntent();
+        courseName = intent.getStringExtra(AddCourseActivity.COURSE_NAME_EXTRA);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
 //        System.out.println(reference.child("courses"));
 
         //course_number = String.valueOf(current_user.getCourseNumber());
 //
-        //createSpinnerInfo();
+//        createSpinnerInfo();
 
 //        evaluation_type.setOnItemSelectedListener(new MyOnItemSelectedListener());
 
@@ -110,10 +110,10 @@ public class AddGradesActivity extends AppCompatActivity {
         add_grade_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!is_selected) {
-                    Toast.makeText(AddGradesActivity.this, "You need to select the evaluation type.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (!evaluation_type.isSelected()) {
+//                    Toast.makeText(AddGradesActivity.this, "You need to select the evaluation type.", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 if (evaluation_name.getText().toString().isEmpty() || evaluation_name.getText().toString().length() == 0) {
                     Toast.makeText(AddGradesActivity.this, "You need to enter the name.", Toast.LENGTH_SHORT).show();
                     return;
@@ -141,12 +141,11 @@ public class AddGradesActivity extends AppCompatActivity {
 
     private void addGrade() {
         ValueEventListener listener = new ValueEventListener() {
+            final ArrayList<Grade> newGrades = new ArrayList<>();
+            final HashMap<String, Object> postGrade = new HashMap<>();
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String selected_evaluation = evaluation_type.getSelectedItem().toString();
-
-                final ArrayList<Grade> newGrades = new ArrayList<>();
-                final HashMap<String, Object> postGrade = new HashMap<>();
 
                 String gradeName = evaluation_name.getText().toString();
                 double userGrade = Double.parseDouble(grade.getText().toString());
@@ -155,14 +154,15 @@ public class AddGradesActivity extends AppCompatActivity {
                 for (DataSnapshot ss : snapshot.getChildren()) {
                     Course c = ss.getValue(Course.class);
                     if (c.getCourseName().equals(courseName)) {
+                        System.out.println("finds the correct name");
                         if (ss.hasChild("grades")) {
-                            postGrade.put(ss.getKey(), ss.getValue(Grade.class));
-                            postGrade.forEach((k, v) -> {
-                                System.out.println(k);
-                                System.out.println(v);
-                            });
-                            int size = postGrade.size();
-                            postGrade.put(Integer.toString(size), g);
+                            System.out.println("has grades list already");
+                            for(DataSnapshot snapshot1: ss.child("grades").getChildren()) {
+                                System.out.println("pls work");
+                                postGrade.put(snapshot1.getKey(), snapshot1.getValue(Grade.class));
+                                int size = postGrade.size();
+                                postGrade.put(Integer.toString(size), g);
+                            }
                             reference.child(uid).child("courses").child(ss.getKey()).child("grades").updateChildren(postGrade);
                         } else {
                             newGrades.add(g);
@@ -177,6 +177,8 @@ public class AddGradesActivity extends AppCompatActivity {
             }
         };
         reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
+        Intent intent = new Intent(AddGradesActivity.this, main_courses.class);
+        startActivity(intent);
     }
 
     private void createSpinnerDropDown() {
@@ -205,8 +207,7 @@ public class AddGradesActivity extends AppCompatActivity {
         };
 
         //create an ArrayAdapter from the String Array
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, weight);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, weight);
         //set the view for the Drop down list
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //set the ArrayAdapter to the spinner
@@ -229,7 +230,6 @@ public class AddGradesActivity extends AppCompatActivity {
     }
 
     private ArrayList<String> getAssessmentNames() {
-        String courseName = "Kevins class";
         ArrayList<String> weights = new ArrayList<>();
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -274,6 +274,5 @@ public class AddGradesActivity extends AppCompatActivity {
             }
         });
     }
-
 }
 
