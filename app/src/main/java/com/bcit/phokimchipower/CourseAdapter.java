@@ -26,7 +26,7 @@ public class CourseAdapter extends FirebaseRecyclerAdapter<Course, CourseAdapter
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(card.getContext(), testActivity.class);
+                Intent intent = new Intent(card.getContext(), AddGradesActivity.class);
                 intent.putExtra(AddCourseActivity.COURSE_NAME_EXTRA, model.getCourseName());
                 intent.putExtra(AddCourseActivity.COURSE_CURRENT_GRADE_EXTRA, model.getCurrentGrade());
                 intent.putExtra(AddCourseActivity.COURSE_WEIGHT_EXTRA, model.getWeight());
