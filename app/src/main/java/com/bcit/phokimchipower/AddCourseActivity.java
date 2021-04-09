@@ -43,6 +43,8 @@ public class AddCourseActivity extends AppCompatActivity {
     EditText name;
     Button add;
 
+    User current_user;
+
     DatabaseReference databaseRef;
     FirebaseAuth mAuth;
     FirebaseUser user;
@@ -89,6 +91,8 @@ public class AddCourseActivity extends AppCompatActivity {
                 addCourse();
             }
         });
+
+        current_user = new User(user.getUid(), user.getEmail(), user.getDisplayName());
     }
 
     private void addCourse() {
@@ -122,6 +126,7 @@ public class AddCourseActivity extends AppCompatActivity {
                     newCourse.add(c);
                     databaseRef.child("courses").setValue(newCourse);
                 }
+                current_user.addCourse(c);
             }
 
             @Override
