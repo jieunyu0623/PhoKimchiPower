@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -115,8 +116,14 @@ public class AddCourseActivity extends AppCompatActivity {
             final HashMap<String, Integer> weight = new HashMap<>();
             final HashMap<String, Object> postCourse = new HashMap<>();
 
+            int sum = weight1Value + weight2Value + weight3Value + weight4Value + weight5Value + weight6Value;
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (sum != 100) {
+                    Toast.makeText(AddCourseActivity.this, "The total weight should be 100.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //ArrayList<Course> newCourse = new ArrayList<>();
                 //HashMap<String, Integer> weight = new HashMap<>();
                 weight.put(spinner1.getSelectedItem().toString(), weight1Value);
@@ -139,6 +146,7 @@ public class AddCourseActivity extends AppCompatActivity {
                     databaseRef.child("courses").setValue(newCourse);
                 }
                 current_user.addCourse(c);
+                System.out.println(current_user.getCourses());
             }
 
             @Override

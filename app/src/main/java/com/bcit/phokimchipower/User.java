@@ -22,6 +22,14 @@ public class User {
         this.courseNumber++;
     }
 
+    public User(String uId, String email, String name, ArrayList<Course> courses) {
+        this.uId = uId;
+        this.email = email;
+        this.name = name;
+        this.courses = courses;
+        this.courseNumber++;
+    }
+
     public String getuId(){
         return uId;
     }

@@ -42,6 +42,14 @@ class Course {
         return grades;
     }
 
+    public void printGrades() {
+        if (grades != null) {
+            for (Grade g : grades) {
+                System.out.println(g.toString());
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "Course{" +

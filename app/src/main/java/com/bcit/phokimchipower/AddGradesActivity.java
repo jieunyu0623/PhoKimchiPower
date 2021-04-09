@@ -45,6 +45,7 @@ public class AddGradesActivity extends AppCompatActivity {
     Button add_grade_button;
     Course current_course;
     String courseName;
+    Boolean is_selected;
     private static final String TAG = "AddGradesActivity";
 
     Spinner evaluation_type;
@@ -77,20 +78,18 @@ public class AddGradesActivity extends AppCompatActivity {
         arrAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         evaluation_type.setAdapter(arrAdapter);
 
-        //attach the listener to the spinner
-//        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String choice = parent.getItemAtPosition(position).toString();
-//                System.out.println(choice);
-//                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
+        // attach the listener to the spinner
+        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                is_selected = true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         Intent intent = getIntent();
         courseName = intent.getStringExtra(AddCourseActivity.COURSE_NAME_EXTRA);
 
@@ -110,10 +109,10 @@ public class AddGradesActivity extends AppCompatActivity {
         add_grade_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!evaluation_type.isSelected()) {
-//                    Toast.makeText(AddGradesActivity.this, "You need to select the evaluation type.", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
+                if (!is_selected) {
+                    Toast.makeText(AddGradesActivity.this, "You need to select the evaluation type.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (evaluation_name.getText().toString().isEmpty() || evaluation_name.getText().toString().length() == 0) {
                     Toast.makeText(AddGradesActivity.this, "You need to enter the name.", Toast.LENGTH_SHORT).show();
                     return;
@@ -143,6 +142,7 @@ public class AddGradesActivity extends AppCompatActivity {
         ValueEventListener listener = new ValueEventListener() {
             final ArrayList<Grade> newGrades = new ArrayList<>();
             final HashMap<String, Object> postGrade = new HashMap<>();
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String selected_evaluation = evaluation_type.getSelectedItem().toString();
@@ -169,6 +169,51 @@ public class AddGradesActivity extends AppCompatActivity {
                             reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
                         }
                     }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        };
+        reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
+        Intent intent = new Intent(AddGradesActivity.this, main_courses.class);
+        startActivity(intent);
+    }
+
+    private void calculateCourseGrade() {
+        ValueEventListener listener = new ValueEventListener() {
+            final ArrayList<Grade> user_grades = new ArrayList<>();
+            final HashMap<String, Integer> weights = new HashMap<>();
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String selected_evaluation = evaluation_type.getSelectedItem().toString();
+
+                String gradeName = evaluation_name.getText().toString();
+                double userGrade = Double.parseDouble(grade.getText().toString());
+
+                Grade g = new Grade(selected_evaluation, gradeName, userGrade);
+                for (DataSnapshot ss : snapshot.getChildren()) {
+                    Course c = ss.getValue(Course.class);
+                    if (c.getCourseName().equals(courseName)) {
+                        System.out.println("finds the correct name");
+                        if (ss.hasChild("grades")) {
+                            System.out.println("has grades list already");
+                            for(DataSnapshot snapshot1: ss.child("grades").getChildren()) {
+                                System.out.println("pls work");
+                                postGrade.put(snapshot1.getKey(), snapshot1.getValue(Grade.class));
+                                int size = postGrade.size();
+                                postGrade.put(Integer.toString(size), g);
+                            }
+                            reference.child(uid).child("courses").child(ss.getKey()).child("grades").updateChildren(postGrade);
+                        } else {
+                            newGrades.add(g);
+                            reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
+                        }
+                    }
+
                 }
             }
 
