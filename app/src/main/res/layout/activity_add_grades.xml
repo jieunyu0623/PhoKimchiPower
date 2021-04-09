@@ -64,7 +64,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="340dp"
         android:layout_height="40dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="100dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"

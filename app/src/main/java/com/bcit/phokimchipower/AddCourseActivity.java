@@ -3,6 +3,8 @@ package com.bcit.phokimchipower;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,6 +53,7 @@ public class AddCourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
+
         spinner1 = findViewById(R.id.spinner_evalType1);
         spinner2 = findViewById(R.id.spinner_evalType2);
         spinner3 = findViewById(R.id.spinner_evalType3);
@@ -132,4 +135,5 @@ public class AddCourseActivity extends AppCompatActivity {
         Intent intent = new Intent(AddCourseActivity.this, main_courses.class);
         startActivity(intent);
     }
+
 }
