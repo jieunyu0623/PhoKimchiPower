@@ -66,6 +66,32 @@ public class AddGradesActivity extends AppCompatActivity {
         uid = user.getUid();
         current_user = new User(user.getUid(), user.getEmail(), user.getDisplayName());
 
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Assignment");
+        list.add("Quizzes");
+        list.add("Labs");
+        list.add("Midterm");
+        list.add("Final");
+        list.add("Projects");
+        ArrayAdapter<String> arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        arrAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        evaluation_type.setAdapter(arrAdapter);
+
+        //attach the listener to the spinner
+//        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String choice = parent.getItemAtPosition(position).toString();
+//                System.out.println(choice);
+//                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+
 //        System.out.println(reference.child("courses"));
 
         //course_number = String.valueOf(current_user.getCourseNumber());
@@ -76,7 +102,7 @@ public class AddGradesActivity extends AppCompatActivity {
 
 
         //adds all the courses inherited from the current user to the courses arraylist and dynamically creates a string-array in XML.
-//        createSpinnerDropDown();
+        //createSpinnerDropDown();
 
         add_grade_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,22 +173,53 @@ public class AddGradesActivity extends AppCompatActivity {
     }
 
 
-//    private void createSpinnerDropDown() {
-//
-//        //Array list of animals to display in the spinner
-//        for (Course course: current_user.getCourses()) {
-//            courses.add(course.toString());
-//        }
-//        //create an ArrayAdapter from the String Array
-//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, courses);
-//        //set the view for the Drop down list
-//        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        //set the ArrayAdapter to the spinner
-//        evaluation_type.setAdapter(dataAdapter);
-//        //attach the listener to the spinner
-//        evaluation_type.setOnItemSelectedListener(new MyOnItemSelectedListener());
-//    }
+    private void createSpinnerDropDown() {
+
+        for (Course course: current_user.getCourses()) {
+            courses.add(course.toString());
+        }
+
+        ArrayList<String> weight = new ArrayList<>();
+
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ss : snapshot.getChildren()) {
+                    Course c = ss.getValue(Course.class);
+                    c.getWeight().forEach((k, v) -> {
+                        weight.add(k);
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        //create an ArrayAdapter from the String Array
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, weight);
+        //set the view for the Drop down list
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //set the ArrayAdapter to the spinner
+        evaluation_type.setAdapter(dataAdapter);
+        //attach the listener to the spinner
+        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String choice = parent.getItemAtPosition(position).toString();
+                System.out.println(choice);
+                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
 
     private ArrayList<String> getAssessmentNames() {
         String courseName = "Kevins class";
