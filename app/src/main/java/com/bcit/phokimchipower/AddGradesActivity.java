@@ -43,6 +43,7 @@ public class AddGradesActivity extends AppCompatActivity {
     EditText grade;
     Button add_grade_button;
     Course current_course;
+    Boolean is_selected;
     String dummyCourseName = "Name";
     private static final String TAG = "AddGradesActivity";
 
@@ -78,25 +79,26 @@ public class AddGradesActivity extends AppCompatActivity {
         evaluation_type.setAdapter(arrAdapter);
 
         //attach the listener to the spinner
-//        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String choice = parent.getItemAtPosition(position).toString();
-//                System.out.println(choice);
-//                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
+        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                is_selected = true;
+                String choice = parent.getItemAtPosition(position).toString();
+                System.out.println(choice);
+                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 //        System.out.println(reference.child("courses"));
 
         //course_number = String.valueOf(current_user.getCourseNumber());
 //
-        createSpinnerInfo();
+        //createSpinnerInfo();
 
 //        evaluation_type.setOnItemSelectedListener(new MyOnItemSelectedListener());
 
@@ -107,7 +109,7 @@ public class AddGradesActivity extends AppCompatActivity {
         add_grade_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!evaluation_type.isSelected()) {
+                if (!is_selected) {
                     Toast.makeText(AddGradesActivity.this, "You need to select the evaluation type.", Toast.LENGTH_SHORT).show();
                     return;
                 }

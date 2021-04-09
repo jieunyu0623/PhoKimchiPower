@@ -63,7 +63,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="340dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
@@ -74,15 +74,15 @@
 
         <TextView
             android:id="@+id/textView9"
-            android:layout_width="30dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
-            android:text="EVALUATION TYPE:"
+            android:text="EVALUATION\nTYPE:"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#000000"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
         <Spinner
             android:id="@+id/evaluation_type_spinner"
