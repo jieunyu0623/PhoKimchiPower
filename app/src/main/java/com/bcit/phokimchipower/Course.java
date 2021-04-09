@@ -19,13 +19,6 @@ class Course {
         this.grades = new ArrayList<>();
     }
 
-    public Course(String courseName, HashMap<String, Integer> weight, ArrayList<Grade> grades) {
-        this.courseName = courseName;
-        this.weight = weight;
-        this.currentGrade = 0;
-        this.grades = grades;
-    }
-
     public String getCourseName(){
         return courseName;
     }
