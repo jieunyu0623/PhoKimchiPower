@@ -2,6 +2,7 @@ package com.bcit.phokimchipower;
 
 import com.google.firebase.database.Exclude;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +44,17 @@ public class User {
 
     public int getCourseNumber() {
         return courseNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uId='" + uId + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", courses=" + courses +
+                ", courseNumber=" + courseNumber +
+                '}';
     }
 }
 
