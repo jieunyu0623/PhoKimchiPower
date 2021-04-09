@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PhoKimchiPower">
-        <activity android:name=".main_courses"></activity>
-        <activity android:name=".testActivity"></activity>
+        <activity android:name=".CourseDetailActivity"></activity>
+        <activity android:name=".main_courses" />
+        <activity android:name=".testActivity" />
         <activity android:name=".AddCourseActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -165,9 +165,10 @@ public class AddGradesActivity extends AppCompatActivity {
                             newGrades.add(g);
                             reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
                         }
+                        calculateCourseGrade(g);
+//                        c = ss.getValue(Course.class);
+//                        System.out.println(c.toString());
                     }
-                    calculateCourseGrade(g);
-                    System.out.println(c.toString());
                 }
             }
 
@@ -176,8 +177,6 @@ public class AddGradesActivity extends AppCompatActivity {
             }
         };
         reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
-        Intent intent = new Intent(AddGradesActivity.this, main_courses.class);
-        startActivity(intent);
     }
 
     private void calculateCourseGrade(Grade g) {
@@ -197,9 +196,6 @@ public class AddGradesActivity extends AppCompatActivity {
                             user_grades.addAll(c.getGrades());
                         } catch (Exception e) {
                             user_grades.add(g);
-                        }
-                        for (Grade grade: user_grades) {
-                            System.out.println(grade.toString());
                         }
                         for (Grade grade: user_grades) {
                             String evaluation_type = grade.getEvaluationType();
@@ -223,17 +219,21 @@ public class AddGradesActivity extends AppCompatActivity {
                         c.setCurrentGrade(courseGradeSum / weightSum);
                         double newGrade = (courseGradeSum / weightSum);
                         reference.child(uid).child("courses").child(ss.getKey()).child("currentGrade").setValue(newGrade);
+                        Intent intent = new Intent(AddGradesActivity.this, CourseDetailActivity.class);
+                        intent.putExtra(AddCourseActivity.COURSE_CURRENT_GRADE_EXTRA, newGrade);
+                        intent.putExtra(AddCourseActivity.COURSE_NAME_EXTRA, courseName);
+                        intent.putExtra("hashMap", evaluationGrades);
+                        startActivity(intent);
                     }
                 }
+
             }
-//                      reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         };
         reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
-        Intent intent = new Intent(AddGradesActivity.this, main_courses.class);
-        startActivity(intent);
+
     }
 
     private void createSpinnerDropDown() {
@@ -272,7 +272,6 @@ public class AddGradesActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String choice = parent.getItemAtPosition(position).toString();
-                System.out.println(choice);
                 Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
             }
 
@@ -319,7 +318,6 @@ public class AddGradesActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String choice = parent.getItemAtPosition(position).toString();
-                System.out.println(choice);
                 Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
             }
 
