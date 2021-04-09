@@ -45,6 +45,7 @@ public class AddGradesActivity extends AppCompatActivity {
     Button add_grade_button;
     Course current_course;
     Boolean is_selected;
+    String courseName;
     String dummyCourseName = "Name";
     private static final String TAG = "AddGradesActivity";
 
@@ -204,7 +205,8 @@ public class AddGradesActivity extends AppCompatActivity {
         };
 
         //create an ArrayAdapter from the String Array
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, weight);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, weight);
         //set the view for the Drop down list
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //set the ArrayAdapter to the spinner
@@ -227,6 +229,7 @@ public class AddGradesActivity extends AppCompatActivity {
     }
 
     private ArrayList<String> getAssessmentNames() {
+        String courseName = "Kevins class";
         ArrayList<String> weights = new ArrayList<>();
         ValueEventListener listener = new ValueEventListener() {
             @Override
