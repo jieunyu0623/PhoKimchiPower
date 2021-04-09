@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ public class AddGradesActivity extends AppCompatActivity {
     EditText grade;
     Button add_grade_button;
     Course current_course;
-    String dummyCourseName = "Name";
+    String courseName;
     private static final String TAG = "AddGradesActivity";
 
     Spinner evaluation_type;
@@ -52,7 +53,6 @@ public class AddGradesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_grades);
-
         evaluation_type = findViewById(R.id.evaluation_type_spinner);
         evaluation_name = findViewById(R.id.evaluation_name_EditText_grades);
         grade = findViewById(R.id.grade_editText_grades);
@@ -91,6 +91,9 @@ public class AddGradesActivity extends AppCompatActivity {
 //
 //            }
 //        });
+        Intent intent = getIntent();
+        courseName = intent.getStringExtra(AddCourseActivity.COURSE_NAME_EXTRA);
+
 
 //        System.out.println(reference.child("courses"));
 
@@ -107,10 +110,10 @@ public class AddGradesActivity extends AppCompatActivity {
         add_grade_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!evaluation_type.isSelected()) {
-                    Toast.makeText(AddGradesActivity.this, "You need to select the evaluation type.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (!evaluation_type.isSelected()) {
+//                    Toast.makeText(AddGradesActivity.this, "You need to select the evaluation type.", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 if (evaluation_name.getText().toString().isEmpty() || evaluation_name.getText().toString().length() == 0) {
                     Toast.makeText(AddGradesActivity.this, "You need to enter the name.", Toast.LENGTH_SHORT).show();
                     return;
@@ -126,52 +129,52 @@ public class AddGradesActivity extends AppCompatActivity {
                 reference.child(uid).child("courses").child(current_user.getCourseNumber() + "").child("currentGrade");
 
 
-                Intent intent = new Intent(AddGradesActivity.this, testActivity.class); //navigates back to the main page.
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(AddGradesActivity.this, testActivity.class); //navigates back to the main page.
+//                startActivity(intent);
+//                finish();
+                addGrade();
                 Toast.makeText(AddGradesActivity.this, "you successfully added a grade!", Toast.LENGTH_SHORT).show();
 
             }
         });
-
-
-//        reference.child(uid).child("courses").child(current_user.getCourseNumber() + "").addChildEventListener(new ChildEventListener() {
-//
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                for(DataSnapshot singleSnapshot : snapshot.getChildren()){
-//                    reference.child(uid).child(current_user.getCourseNumber() + "").child(current_user.getCourses().get(0).toString());
-//                    current_user = singleSnapshot.getValue(User.class);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.e(TAG, "onCancelled", error.toException());
-//            }
-//        });
-//
-//
-
-
     }
 
+    private void addGrade() {
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // String selected_evaluation = evaluation_type.getSelectedItem().toString();
+                String selected_evaluation = "Assignments";
+
+                final ArrayList<Grade> newGrades = new ArrayList<>();
+                final HashMap<String, Object> postGrade = new HashMap<>();
+
+                String gradeName = evaluation_name.getText().toString();
+                double userGrade = Double.parseDouble(grade.getText().toString());
+
+                Grade g = new Grade(selected_evaluation, gradeName, userGrade);
+                for (DataSnapshot ss: snapshot.getChildren()) {
+                    Course c = ss.getValue(Course.class);
+                    if (c.getCourseName().equals(courseName)) {
+                        if (ss.hasChild("grades")) {
+                            postGrade.put(ss.getKey(), ss.getValue(Grade.class));
+                            postGrade.forEach((k, v) -> {
+                                System.out.println(k);
+                                System.out.println(v);
+                            });
+                            int size = postGrade.size();
+                            postGrade.put(Integer.toString(size), g);
+                            reference.child(uid).child("courses").child(ss.getKey()).child("grades").updateChildren(postGrade);
+                        } else {
+                            newGrades.add(g);
+                            reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
     private void createSpinnerDropDown() {
 
@@ -219,10 +222,12 @@ public class AddGradesActivity extends AppCompatActivity {
 
             }
         });
+            }
+        };
+        reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
     }
 
     private ArrayList<String> getAssessmentNames() {
-        String courseName = "Kevins class";
         ArrayList<String> weights = new ArrayList<>();
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -233,6 +238,7 @@ public class AddGradesActivity extends AppCompatActivity {
                         c.getWeight().forEach((k, v) -> {
                             weights.add(k);
                         });
+                    current_course = c;
                     }
                 }
             }
