@@ -136,51 +136,49 @@ public class AddGradesActivity extends AppCompatActivity {
 
             }
         });
-    }
 
     private void addGrade() {
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String selected_evaluation = evaluation_type.getSelectedItem().toString();
+            ValueEventListener listener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    // String selected_evaluation = evaluation_type.getSelectedItem().toString();
+                    String selected_evaluation = "Assignments";
 
-                final ArrayList<Grade> newGrades = new ArrayList<>();
-                final HashMap<String, Object> postGrade = new HashMap<>();
+                    final ArrayList<Grade> newGrades = new ArrayList<>();
+                    final HashMap<String, Object> postGrade = new HashMap<>();
 
-                String gradeName = evaluation_name.getText().toString();
-                double userGrade = Double.parseDouble(grade.getText().toString());
+                    String gradeName = evaluation_name.getText().toString();
+                    double userGrade = Double.parseDouble(grade.getText().toString());
 
-                Grade g = new Grade(selected_evaluation, gradeName, userGrade);
-                for (DataSnapshot ss : snapshot.getChildren()) {
-                    Course c = ss.getValue(Course.class);
-                    if (c.getCourseName().equals(courseName)) {
-                        if (ss.hasChild("grades")) {
-                            postGrade.put(ss.getKey(), ss.getValue(Grade.class));
-                            postGrade.forEach((k, v) -> {
-                                System.out.println(k);
-                                System.out.println(v);
-                            });
-                            int size = postGrade.size();
-                            postGrade.put(Integer.toString(size), g);
-                            reference.child(uid).child("courses").child(ss.getKey()).child("grades").updateChildren(postGrade);
-                        } else {
-                            newGrades.add(g);
-                            reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
+                    Grade g = new Grade(selected_evaluation, gradeName, userGrade);
+                    for (DataSnapshot ss : snapshot.getChildren()) {
+                        Course c = ss.getValue(Course.class);
+                        if (c.getCourseName().equals(courseName)) {
+                            if (ss.hasChild("grades")) {
+                                postGrade.put(ss.getKey(), ss.getValue(Grade.class));
+                                postGrade.forEach((k, v) -> {
+                                    System.out.println(k);
+                                    System.out.println(v);
+                                });
+                                int size = postGrade.size();
+                                postGrade.put(Integer.toString(size), g);
+                                reference.child(uid).child("courses").child(ss.getKey()).child("grades").updateChildren(postGrade);
+                            } else {
+                                newGrades.add(g);
+                                reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
+                            }
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        };
-        reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
-    }
-
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            };
+        }
     private void createSpinnerDropDown() {
 
-        for (Course course : current_user.getCourses()) {
+        for (Course course: current_user.getCourses()) {
             courses.add(course.toString());
         }
 
@@ -204,7 +202,8 @@ public class AddGradesActivity extends AppCompatActivity {
         };
 
         //create an ArrayAdapter from the String Array
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, weight);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, weight);
         //set the view for the Drop down list
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //set the ArrayAdapter to the spinner
@@ -223,10 +222,13 @@ public class AddGradesActivity extends AppCompatActivity {
 
             }
         });
+            }
+        };
         reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
     }
 
     private ArrayList<String> getAssessmentNames() {
+        String courseName = "Kevins class";
         ArrayList<String> weights = new ArrayList<>();
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -237,7 +239,7 @@ public class AddGradesActivity extends AppCompatActivity {
                         c.getWeight().forEach((k, v) -> {
                             weights.add(k);
                         });
-                        current_course = c;
+                    current_course = c;
                     }
                 }
             }
