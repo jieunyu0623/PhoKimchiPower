@@ -154,11 +154,8 @@ public class AddGradesActivity extends AppCompatActivity {
                 for (DataSnapshot ss : snapshot.getChildren()) {
                     Course c = ss.getValue(Course.class);
                     if (c.getCourseName().equals(courseName)) {
-                        System.out.println("finds the correct name");
                         if (ss.hasChild("grades")) {
-                            System.out.println("has grades list already");
                             for(DataSnapshot snapshot1: ss.child("grades").getChildren()) {
-                                System.out.println("pls work");
                                 postGrade.put(snapshot1.getKey(), snapshot1.getValue(Grade.class));
                                 int size = postGrade.size();
                                 postGrade.put(Integer.toString(size), g);
@@ -169,7 +166,8 @@ public class AddGradesActivity extends AppCompatActivity {
                             reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
                         }
                     }
-
+                    calculateCourseGrade(g);
+                    System.out.println(c.toString());
                 }
             }
 
@@ -182,41 +180,53 @@ public class AddGradesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void calculateCourseGrade() {
+    private void calculateCourseGrade(Grade g) {
         ValueEventListener listener = new ValueEventListener() {
             final ArrayList<Grade> user_grades = new ArrayList<>();
             final HashMap<String, Integer> weights = new HashMap<>();
+            HashMap<String, ArrayList<Double>> recordedGrades = new HashMap<>();
+            HashMap<String, Double> evaluationGrades = new HashMap<>();
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String selected_evaluation = evaluation_type.getSelectedItem().toString();
-
-                String gradeName = evaluation_name.getText().toString();
-                double userGrade = Double.parseDouble(grade.getText().toString());
-
-                Grade g = new Grade(selected_evaluation, gradeName, userGrade);
                 for (DataSnapshot ss : snapshot.getChildren()) {
                     Course c = ss.getValue(Course.class);
                     if (c.getCourseName().equals(courseName)) {
-                        System.out.println("finds the correct name");
-                        if (ss.hasChild("grades")) {
-                            System.out.println("has grades list already");
-                            for(DataSnapshot snapshot1: ss.child("grades").getChildren()) {
-                                System.out.println("pls work");
-                                postGrade.put(snapshot1.getKey(), snapshot1.getValue(Grade.class));
-                                int size = postGrade.size();
-                                postGrade.put(Integer.toString(size), g);
-                            }
-                            reference.child(uid).child("courses").child(ss.getKey()).child("grades").updateChildren(postGrade);
-                        } else {
-                            newGrades.add(g);
-                            reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
+                        c.getWeight().forEach(weights::put);
+                        try {
+                            user_grades.addAll(c.getGrades());
+                        } catch (Exception e) {
+                            user_grades.add(g);
                         }
+                        for (Grade grade: user_grades) {
+                            System.out.println(grade.toString());
+                        }
+                        for (Grade grade: user_grades) {
+                            String evaluation_type = grade.getEvaluationType();
+                            if (recordedGrades.containsKey(evaluation_type)) {
+                                recordedGrades.get(evaluation_type).add(grade.getGrade());
+                            } else {
+                                ArrayList<Double> newRecordedGrades = new ArrayList<>();
+                                newRecordedGrades.add(grade.getGrade());
+                                recordedGrades.put(evaluation_type, newRecordedGrades);
+                            }
+                        }
+                        double courseGradeSum = 0.0;
+                        int weightSum = 0;
+                        for (Map.Entry<String, ArrayList<Double>> e: recordedGrades.entrySet()) {
+                            double gradeSum = e.getValue().stream().mapToDouble(Double::doubleValue).sum();
+                            gradeSum /= e.getValue().size();
+                            evaluationGrades.put(e.getKey(), gradeSum);
+                            courseGradeSum += gradeSum * weights.get(e.getKey());
+                            weightSum += weights.get(e.getKey());
+                        }
+                        c.setCurrentGrade(courseGradeSum / weightSum);
+                        double newGrade = (courseGradeSum / weightSum);
+                        reference.child(uid).child("courses").child(ss.getKey()).child("currentGrade").setValue(newGrade);
                     }
-
                 }
             }
-
+//                      reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }

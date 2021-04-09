@@ -50,6 +50,10 @@ class Course {
         }
     }
 
+    public void setCurrentGrade(Double grade) {
+        this.currentGrade = grade;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
