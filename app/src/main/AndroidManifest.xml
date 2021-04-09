@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity" />
+        <activity android:name=".AddGradesActivity" />
     </application>
 
 </manifest>
