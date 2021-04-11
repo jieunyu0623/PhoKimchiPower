@@ -25,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -216,8 +218,12 @@ public class AddGradesActivity extends AppCompatActivity {
                             courseGradeSum += gradeSum * weights.get(e.getKey());
                             weightSum += weights.get(e.getKey());
                         }
-                        c.setCurrentGrade(courseGradeSum / weightSum);
-                        double newGrade = (courseGradeSum / weightSum);
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        df.setRoundingMode(RoundingMode.HALF_UP);
+                        double result = new Double(df.format(courseGradeSum / weightSum));
+                        System.out.println(result);
+                        c.setCurrentGrade(result);
+                        double newGrade = (result);
                         reference.child(uid).child("courses").child(ss.getKey()).child("currentGrade").setValue(newGrade);
                         Intent intent = new Intent(AddGradesActivity.this, CourseDetailActivity.class);
                         intent.putExtra(AddCourseActivity.COURSE_CURRENT_GRADE_EXTRA, newGrade);

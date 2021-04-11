@@ -1,18 +1,52 @@
 package com.bcit.phokimchipower;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CourseDetailActivity extends AppCompatActivity {
+
+    ImageView assignments;
+    ImageView labs;
+    ImageView midterms;
+    ImageView finals;
+    ImageView projects;
+    ImageView quizzes;
+    String message;
+    final HashMap<String, Double> a = new HashMap<>();
+    final HashMap<String, Double> l = new HashMap<>();
+    final HashMap<String, Double> m = new HashMap<>();
+    final HashMap<String, Double> f = new HashMap<>();
+    final HashMap<String, Double> p = new HashMap<>();
+    final HashMap<String, Double> q = new HashMap<>();
+
+    private DatabaseReference reference;
+    private FirebaseDatabase database;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    String courseName;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +54,72 @@ public class CourseDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_detail);
         Intent intent = getIntent();
         double courseGrade = intent.getDoubleExtra(AddCourseActivity.COURSE_CURRENT_GRADE_EXTRA, 0.0);
-        String courseName = intent.getStringExtra(AddCourseActivity.COURSE_NAME_EXTRA);
+        courseName = intent.getStringExtra(AddCourseActivity.COURSE_NAME_EXTRA);
         HashMap<String, Double> hashMap = (HashMap<String, Double>) intent.getSerializableExtra("hashMap");
         TextView courseName_detail = findViewById(R.id.courseName_detail);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        uid = user.getUid();
+        reference = database.getReference("Users");
+
+        assignments = findViewById(R.id.assessment1);
+        labs = findViewById(R.id.assessment2);
+        midterms = findViewById(R.id.assessment3);
+        finals = findViewById(R.id.assessment4);
+        projects = findViewById(R.id.assessment5);
+        quizzes = findViewById(R.id.assessment6);
+
+        reference = reference.child(uid).child("courses");
+
+        reference.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ss : snapshot.getChildren()) {
+                    Course c = ss.getValue(Course.class);
+                    if (c.getCourseName().equals(courseName)) {
+                        for(DataSnapshot snapshot1: ss.child("grades").getChildren()) {
+                            Grade grade = snapshot1.getValue(Grade.class);
+                            if (grade.getEvaluationType() != null) {
+                                if (grade.getEvaluationType().equals("Assignment")) {
+                                    a.put(grade.getGradeName(), grade.getGrade());
+                                }
+                                if (grade.getEvaluationType().equals("Labs")) {
+                                    l.put(grade.getGradeName(), grade.getGrade());
+                                }
+                                if (grade.getEvaluationType().equals("Midterm")) {
+                                    m.put(grade.getGradeName(), grade.getGrade());
+                                }
+                                if (grade.getEvaluationType().equals("Projects")) {
+                                    p.put(grade.getGradeName(), grade.getGrade());
+                                }
+                                if (grade.getEvaluationType().equals("Final")) {
+                                    f.put(grade.getGradeName(), grade.getGrade());
+                                }
+                                if (grade.getEvaluationType().equals("Quizzes")) {
+                                    q.put(grade.getGradeName(), grade.getGrade());
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        showDialog(assignments, a, "Assignments");
+        showDialog(labs, l, "Labs");
+        showDialog(quizzes, q, "Quizzes");
+        showDialog(projects, p, "Projects");
+        showDialog(finals, f, "Final");
+        showDialog(midterms, m, "Midterm");
 
         TextView title1 = findViewById(R.id.textView15);
         TextView title2 = findViewById(R.id.textView17);
@@ -80,6 +177,33 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         courseName_detail.setText(courseName);
 
+
+    }
+
+    public void showDialog(ImageView courseTypeImageView, HashMap<String, Double> courseArray, String title) {
+
+        courseTypeImageView.setOnClickListener(new View.OnClickListener() {
+
+                                           @Override
+                                           public void onClick(View v) {
+
+                                               for (Map.Entry grade: courseArray.entrySet()) {
+                                                   System.out.println(grade);
+                                                   message += grade.getKey().toString() + ":  " + grade.getValue().toString() + "\n\n";
+                                               }
+                                               new AlertDialog.Builder(CourseDetailActivity.this)
+                                                       .setTitle(title)
+                                                       .setMessage(message)
+                                                       .setNeutralButton("close", new DialogInterface.OnClickListener() {
+                                                           @Override
+                                                           public void onClick(DialogInterface dialog, int which) {
+                                                           }
+                                                       })
+                                                       .show(); //shows the dialog message.
+                                               message = "";
+                                           }
+                                       }
+        );
 
     }
 }
