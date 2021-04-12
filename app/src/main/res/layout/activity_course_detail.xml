@@ -348,14 +348,14 @@
         android:id="@+id/back_to_main"
         android:layout_width="187dp"
         android:layout_height="63dp"
-        android:text="Back to main"
+        android:text="@string/back_to_main"
         app:cornerRadius="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.94" />
+        app:layout_constraintVertical_bias="0.941" />
 
     <ImageView
         android:id="@+id/assessment1"
@@ -368,5 +368,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.274"
         app:srcCompat="@drawable/assessment_icon" />
+
+    <Button
+        android:id="@+id/button_add_grade"
+        android:layout_width="187dp"
+        android:layout_height="63dp"
+        android:text="@string/button_add_grade"
+        app:cornerRadius="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.941" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

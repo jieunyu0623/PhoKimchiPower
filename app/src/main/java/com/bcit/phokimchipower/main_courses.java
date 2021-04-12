@@ -17,6 +17,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class main_courses extends AppCompatActivity {
+    public static final String COURSE_NAME_EXTRA = "ca.bcit.phokimchipower.coursename";
+    public static final String COURSE_CURRENT_GRADE_EXTRA = "ca.bcit.phokimchipower.currentgrade";
+
     RecyclerView recyclerView;
     CourseAdapter adapter;
     DatabaseReference databaseRef;

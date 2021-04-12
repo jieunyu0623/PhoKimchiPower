@@ -16,6 +16,8 @@ public class testActivity extends AppCompatActivity {
         TextView test = findViewById(R.id.test_Intent);
         Intent intent = getIntent();
         String name = intent.getStringExtra(AddCourseActivity.COURSE_NAME_EXTRA);
+        Double grade = intent.getDoubleExtra(AddCourseActivity.COURSE_CURRENT_GRADE_EXTRA, 0);
+        System.out.println(grade);
         test.setText(name);
     }
 }

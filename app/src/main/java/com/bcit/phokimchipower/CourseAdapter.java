@@ -26,14 +26,12 @@ public class CourseAdapter extends FirebaseRecyclerAdapter<Course, CourseAdapter
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(card.getContext(), AddGradesActivity.class);
-                intent.putExtra(AddCourseActivity.COURSE_NAME_EXTRA, model.getCourseName());
-                intent.putExtra(AddCourseActivity.COURSE_CURRENT_GRADE_EXTRA, model.getCurrentGrade());
-                intent.putExtra(AddCourseActivity.COURSE_WEIGHT_EXTRA, model.getWeight());
+                Intent intent = new Intent(card.getContext(), CourseDetailActivity.class);
+                intent.putExtra(main_courses.COURSE_NAME_EXTRA, model.getCourseName());
+                intent.putExtra(main_courses.COURSE_CURRENT_GRADE_EXTRA, model.getCurrentGrade());
                 v.getContext().startActivity(intent);
             }
         });
-//        holder.Course2TextView.setText(model.getCourseName());
 
     }
 
@@ -48,13 +46,11 @@ public class CourseAdapter extends FirebaseRecyclerAdapter<Course, CourseAdapter
 
         public TextView Course1TextView;
         public CardView card;
-//        public TextView Course2TextView;
 
         public CourseViewHolder(@NonNull View itemView) {
             super(itemView);
             Course1TextView = itemView.findViewById(R.id.textView_courseName1);
             card = itemView.findViewById(R.id.card_elem);
-//            Course2TextView = itemView.findViewById(R.id.textView_courseName2);
 
         }
     }

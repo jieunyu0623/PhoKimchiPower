@@ -30,4 +30,6 @@
     <string name="textView_weight5">Weight</string>
     <string name="textView_weight6">Weight</string>
     <string name="main_courseName">COURSES</string>
+    <string name="button_add_grade">Add Grade</string>
+    <string name="back_to_main">Back to Main</string>
 </resources>

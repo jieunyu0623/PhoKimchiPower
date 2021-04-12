@@ -151,7 +151,7 @@ public class AddGradesActivity extends AppCompatActivity {
 
                 String gradeName = evaluation_name.getText().toString();
                 double userGrade = Double.parseDouble(grade.getText().toString());
-
+                System.out.println(courseName);
                 Grade g = new Grade(selected_evaluation, gradeName, userGrade);
                 for (DataSnapshot ss : snapshot.getChildren()) {
                     Course c = ss.getValue(Course.class);
@@ -226,8 +226,8 @@ public class AddGradesActivity extends AppCompatActivity {
                         double newGrade = (result);
                         reference.child(uid).child("courses").child(ss.getKey()).child("currentGrade").setValue(newGrade);
                         Intent intent = new Intent(AddGradesActivity.this, CourseDetailActivity.class);
-                        intent.putExtra(AddCourseActivity.COURSE_CURRENT_GRADE_EXTRA, newGrade);
-                        intent.putExtra(AddCourseActivity.COURSE_NAME_EXTRA, courseName);
+                        intent.putExtra(main_courses.COURSE_CURRENT_GRADE_EXTRA, newGrade);
+                        intent.putExtra(main_courses.COURSE_NAME_EXTRA, courseName);
                         intent.putExtra("hashMap", evaluationGrades);
                         startActivity(intent);
                     }
@@ -239,7 +239,6 @@ public class AddGradesActivity extends AppCompatActivity {
             }
         };
         reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
-
     }
 
     private void createSpinnerDropDown() {

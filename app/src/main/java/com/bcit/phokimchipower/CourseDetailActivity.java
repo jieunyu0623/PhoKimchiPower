@@ -48,14 +48,16 @@ public class CourseDetailActivity extends AppCompatActivity {
     String courseName;
     String uid;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
         Intent intent = getIntent();
-        double courseGrade = intent.getDoubleExtra(AddCourseActivity.COURSE_CURRENT_GRADE_EXTRA, 0.0);
-        courseName = intent.getStringExtra(AddCourseActivity.COURSE_NAME_EXTRA);
+        double courseGrade = intent.getDoubleExtra(main_courses.COURSE_CURRENT_GRADE_EXTRA, 0.0);
+        courseName = intent.getStringExtra(main_courses.COURSE_NAME_EXTRA);
         HashMap<String, Double> hashMap = (HashMap<String, Double>) intent.getSerializableExtra("hashMap");
+
         TextView courseName_detail = findViewById(R.id.courseName_detail);
 
         mAuth = FirebaseAuth.getInstance();
@@ -136,6 +138,18 @@ public class CourseDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CourseDetailActivity.this, main_courses.class);
+                intent.putExtra("hashMap", hashMap);
+                startActivity(intent);
+            }
+        });
+
+        Button addGrade = findViewById(R.id.button_add_grade);
+
+        addGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CourseDetailActivity.this, AddGradesActivity.class);
+                intent.putExtras(getIntent().getExtras());
                 startActivity(intent);
             }
         });
@@ -149,28 +163,30 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         current_grade.setText(Double.toString(courseGrade));
 
-        if (hashMap.containsKey("Assignment")) {
-            grade1.setText(Double.toString(hashMap.get(title1.getText().toString())));
-        }
+        if(hashMap != null) {
+            if (hashMap.containsKey("Assignment")) {
+                grade1.setText(Double.toString(hashMap.get(title1.getText().toString())));
+            }
 
-        if (hashMap.containsKey("Labs")) {
-            grade2.setText(Double.toString(hashMap.get(title2.getText().toString())));
-        }
+            if (hashMap.containsKey("Labs")) {
+                grade2.setText(Double.toString(hashMap.get(title2.getText().toString())));
+            }
 
-        if (hashMap.containsKey("Midterm")) {
-            grade3.setText(Double.toString(hashMap.get(title3.getText().toString())));
-        }
+            if (hashMap.containsKey("Midterm")) {
+                grade3.setText(Double.toString(hashMap.get(title3.getText().toString())));
+            }
 
-        if (hashMap.containsKey("Final")) {
-            grade4.setText(Double.toString(hashMap.get(title4.getText().toString())));
-        }
+            if (hashMap.containsKey("Final")) {
+                grade4.setText(Double.toString(hashMap.get(title4.getText().toString())));
+            }
 
-        if (hashMap.containsKey("Projects")) {
-            grade5.setText(Double.toString(hashMap.get(title5.getText().toString())));
-        }
+            if (hashMap.containsKey("Projects")) {
+                grade5.setText(Double.toString(hashMap.get(title5.getText().toString())));
+            }
 
-        if (hashMap.containsKey("Quizzes")) {
-            grade6.setText(Double.toString(hashMap.get(title6.getText().toString())));
+            if (hashMap.containsKey("Quizzes")) {
+                grade6.setText(Double.toString(hashMap.get(title6.getText().toString())));
+            }
         }
 
 
@@ -183,27 +199,24 @@ public class CourseDetailActivity extends AppCompatActivity {
     public void showDialog(ImageView courseTypeImageView, HashMap<String, Double> courseArray, String title) {
 
         courseTypeImageView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
 
-                                           @Override
-                                           public void onClick(View v) {
-
-                                               for (Map.Entry grade: courseArray.entrySet()) {
-                                                   System.out.println(grade);
-                                                   message += grade.getKey().toString() + ":  " + grade.getValue().toString() + "\n\n";
-                                               }
-                                               new AlertDialog.Builder(CourseDetailActivity.this)
-                                                       .setTitle(title)
-                                                       .setMessage(message)
-                                                       .setNeutralButton("close", new DialogInterface.OnClickListener() {
-                                                           @Override
-                                                           public void onClick(DialogInterface dialog, int which) {
-                                                           }
-                                                       })
-                                                       .show(); //shows the dialog message.
-                                               message = "";
-                                           }
-                                       }
-        );
-
+               for (Map.Entry grade: courseArray.entrySet()) {
+                   System.out.println(grade);
+                   message += grade.getKey().toString() + ":  " + grade.getValue().toString() + "\n\n";
+               }
+               new AlertDialog.Builder(CourseDetailActivity.this)
+                       .setTitle(title)
+                       .setMessage(message)
+                       .setNeutralButton("close", new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                           }
+                       })
+                       .show(); //shows the dialog message.
+               message = "";
+           }
+       });
     }
 }
