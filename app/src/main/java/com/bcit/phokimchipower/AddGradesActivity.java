@@ -40,12 +40,10 @@ public class AddGradesActivity extends AppCompatActivity {
     private FirebaseUser user;
     String uid;
     User current_user;
-    String course_number;
     ArrayList<String> courses;
     EditText evaluation_name;
     EditText grade;
     Button add_grade_button;
-    Course current_course;
     String courseName;
     Boolean is_selected;
     private static final String TAG = "AddGradesActivity";
@@ -95,19 +93,6 @@ public class AddGradesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         courseName = intent.getStringExtra(AddCourseActivity.COURSE_NAME_EXTRA);
 
-
-//        System.out.println(reference.child("courses"));
-
-        //course_number = String.valueOf(current_user.getCourseNumber());
-//
-//        createSpinnerInfo();
-
-//        evaluation_type.setOnItemSelectedListener(new MyOnItemSelectedListener());
-
-
-        //adds all the courses inherited from the current user to the courses arraylist and dynamically creates a string-array in XML.
-        //createSpinnerDropDown();
-
         add_grade_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,11 +113,6 @@ public class AddGradesActivity extends AppCompatActivity {
                     return;
                 }
                 reference.child(uid).child("courses").child(current_user.getCourseNumber() + "").child("currentGrade");
-
-
-//                Intent intent = new Intent(AddGradesActivity.this, testActivity.class); //navigates back to the main page.
-//                startActivity(intent);
-//                finish();
                 addGrade();
                 Toast.makeText(AddGradesActivity.this, "you successfully added a grade!", Toast.LENGTH_SHORT).show();
 
@@ -168,8 +148,6 @@ public class AddGradesActivity extends AppCompatActivity {
                             reference.child(uid).child("courses").child(ss.getKey()).child("grades").setValue(newGrades);
                         }
                         calculateCourseGrade(g);
-//                        c = ss.getValue(Course.class);
-//                        System.out.println(c.toString());
                     }
                 }
             }
@@ -239,98 +217,6 @@ public class AddGradesActivity extends AppCompatActivity {
             }
         };
         reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
-    }
-
-    private void createSpinnerDropDown() {
-
-        for (Course course : current_user.getCourses()) {
-            courses.add(course.toString());
-        }
-
-        ArrayList<String> weight = new ArrayList<>();
-
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ss : snapshot.getChildren()) {
-                    Course c = ss.getValue(Course.class);
-                    c.getWeight().forEach((k, v) -> {
-                        weight.add(k);
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-
-        //create an ArrayAdapter from the String Array
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, weight);
-        //set the view for the Drop down list
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //set the ArrayAdapter to the spinner
-        evaluation_type.setAdapter(dataAdapter);
-        //attach the listener to the spinner
-        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String choice = parent.getItemAtPosition(position).toString();
-                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
-    }
-
-    private ArrayList<String> getAssessmentNames() {
-        ArrayList<String> weights = new ArrayList<>();
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ss : snapshot.getChildren()) {
-                    Course c = ss.getValue(Course.class);
-                    if (courseName.equals(c.getCourseName())) {
-                        c.getWeight().forEach((k, v) -> {
-                            weights.add(k);
-                        });
-                        current_course = c;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        reference.child(uid).child("courses").addListenerForSingleValueEvent(listener);
-        return weights;
-    }
-
-
-    public void createSpinnerInfo() {
-        ArrayList<String> user_evaluations = getAssessmentNames();
-        ArrayAdapter<String> arrAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, user_evaluations);
-        arrAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        evaluation_type.setAdapter(arrAdapter);
-        evaluation_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String choice = parent.getItemAtPosition(position).toString();
-                Toast.makeText(AddGradesActivity.this, choice, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 }
 

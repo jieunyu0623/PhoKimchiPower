@@ -141,7 +141,6 @@ public class SignupActivity extends AppCompatActivity {
 
     public boolean onSupportNavigateUp() {
         onBackPressed();
-        ; // when the user hits the goback button
         return super.onSupportNavigateUp(); // goback button activates.
     }
 
